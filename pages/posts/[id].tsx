@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { GetStaticProps, GetStaticPaths } from "next";
 
 import { getAllPostIds, getPostData } from "../../lib/posts";
 
@@ -8,7 +9,13 @@ import Date from "../../components/date";
 import utilStyles from "../../styles/utils.module.css";
 
 // Statically generate a page using Dynamic Routes
-export default function Post({ postData }) {
+export default function Post({ postData }: {
+  postData: { 
+    title: string;
+    date: string;
+    contentHtml: string;
+  }
+}) {
   return (
     <Layout>
 
@@ -32,7 +39,7 @@ export default function Post({ postData }) {
   )
 }
 
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
   // Return a list of possible values for 'id' - POSSIBLE PATHS
   const paths = getAllPostIds();
   return {
@@ -41,10 +48,10 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({ params }) {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   // fetch data for the specific blog post using params.id
   // params uses the path - path to this file is posts/[id]
-  const postData = await getPostData(params.id);
+  const postData = await getPostData(params.id as string);
   return {
     props: { postData }
   };

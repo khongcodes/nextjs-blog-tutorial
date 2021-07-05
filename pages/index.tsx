@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Link from "next/link";
+import { GetStaticProps } from "next";
 
 import { getSortedPostData } from "../lib/posts";
 
@@ -9,7 +10,7 @@ import Date from "../components/date";
 import utilStyles from "../styles/utils.module.css";
 
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
   const allPostsData = getSortedPostData();
   return {
     props: {
@@ -31,7 +32,13 @@ export async function getStaticProps() {
 // like a dashboard
 
 
-export default function Home({ allPostsData }) {
+export default function Home({ allPostsData }: {
+  allPostsData: {
+    date: string;
+    title: string;
+    id: string;
+  }[]
+}) {
   return (
     <Layout home>
       <Head>
